@@ -1,6 +1,7 @@
 import './App.css';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomePage from './Components/HomePage';
+import Introduce from './Components/Introduce';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssVarsProvider } from '@mui/joy';
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/Introduce" element={<Introduce />} />
           </Routes>
         </Router>
       </CssVarsProvider>
