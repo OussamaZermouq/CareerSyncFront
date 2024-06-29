@@ -18,6 +18,7 @@ import Modal from '@mui/joy/Modal';
 import ModalDialog from '@mui/joy/ModalDialog';
 import AddIcon from '@mui/icons-material/Add';
 import Input from '@mui/joy/Input';
+import { jsPDF } from "jspdf";
 
 const Item = styled(Sheet)(({ theme }) => ({
     backgroundColor:
@@ -86,6 +87,57 @@ export default function CvMaker() {
     const handleEducationSubmit = () => {
         setEducationText(tempEducationText);
         setEducationOpen(false);
+    };
+    const generatePDF = () => {
+        const doc = new jsPDF();
+        let y = 10;
+
+        if (image) {
+            doc.addImage(image, 'JPEG', 10, y, 50, 50);
+            y += 60;
+        }
+
+        if (profileText) {
+            doc.setFontSize(16);
+            doc.text("Profile", 10, y);
+            doc.setFontSize(12);
+            doc.text(profileText, 10, y + 10);
+            y += 30;
+        }
+
+        if (competenceText) {
+            doc.setFontSize(16);
+            doc.text("Competence", 10, y);
+            doc.setFontSize(12);
+            doc.text(competenceText, 10, y + 10);
+            y += 30;
+        }
+
+        if (experienceText) {
+            doc.setFontSize(16);
+            doc.text("Experience", 10, y);
+            doc.setFontSize(12);
+            doc.text(experienceText, 10, y + 10);
+            y += 30;
+        }
+
+        if (languageText) {
+            doc.setFontSize(16);
+            doc.text("Language", 10, y);
+            doc.setFontSize(12);
+            doc.text(languageText, 10, y + 10);
+            y += 30;
+        }
+
+        if (educationText) {
+            doc.setFontSize(16);
+            doc.text("Education", 10, y);
+            doc.setFontSize(12);
+            doc.text(educationText, 10, y + 10);
+            y += 30;
+        }
+
+        doc.save('cv.pdf');
     };
 
     return (
@@ -418,6 +470,11 @@ export default function CvMaker() {
                         </Grid>
                     </Grid>
                 </Box>
+                <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", height: '100%', my: 5 }}>
+                        <Button variant="solid" color="primary" onClick={generatePDF}>
+                            Next
+                        </Button>
+                    </Box>
             </Box>
             <CssBaseline />
         </main>
