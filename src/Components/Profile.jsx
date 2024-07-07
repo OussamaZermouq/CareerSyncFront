@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
-import NavBar from './NavBar';
+import { useState, useEffect } from 'react'; import NavBar from './NavBar';
 import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
@@ -14,6 +13,9 @@ import ModalClose from '@mui/joy/ModalClose';
 import Input from '@mui/joy/Input';
 import { LinearProgress, Stack } from '@mui/joy';
 import Person from '@mui/icons-material/Person';
+import { getUser, updateUser } from '../API/User/UserDataService';
+
+
 
 export default function Profile() {
     const [open, setOpen] = useState(false);
@@ -28,12 +30,42 @@ export default function Profile() {
     const [cv, setCv] = useState('');
     const [dateOfBirth, setDateOfBirth] = useState('');
 
+    useEffect(() => {
+        async function fetchData() {
+            const userData = await getUser();
+            if (userData) {
+                setName(userData.name);
+                setLastName(userData.lastName);
+                setEmail(userData.email);
+                setPassword(userData.password);
+                setBio(userData.bio);
+                setSkills(userData.skills);
+                setCv(userData.cv);
+                setDateOfBirth(userData.dateOfBirth);
+            }
+        }
+        fetchData();
+    }, []);
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const handleSave = (event) => {
+    const handleSave = async (event) => {
         event.preventDefault();
-        setOpen(false);
+        const user = {
+            name,
+            lastName,
+            email,
+            password,
+            bio,
+            skills,
+            cv,
+            dateOfBirth,
+        };
+        const updatedUser = await updateUser(user);
+        if (updatedUser) {
+            setOpen(false);
+        }
     };
 
     const minLength = 12;
@@ -71,7 +103,7 @@ export default function Profile() {
                         </Grid>
                         <Grid item xs={12}>
                             <Typography level="h6">Password:</Typography>
-                            <Typography>{password}</Typography>
+                            <Typography>{password.replace(/./g, '*')}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography level="h6">Bio:</Typography>
@@ -105,25 +137,25 @@ export default function Profile() {
                     <Box component="form" sx={{ mt: 2 }} onSubmit={handleSave}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <Input 
-                                    placeholder="Name" 
-                                    fullWidth 
+                                <Input
+                                    placeholder="Name"
+                                    fullWidth
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <Input 
-                                    placeholder="Last Name" 
-                                    fullWidth 
+                                <Input
+                                    placeholder="Last Name"
+                                    fullWidth
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <Input 
-                                    placeholder="Email" 
-                                    fullWidth 
+                                <Input
+                                    placeholder="Email"
+                                    fullWidth
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -162,35 +194,42 @@ export default function Profile() {
                                 </Stack>
                             </Grid>
                             <Grid item xs={12}>
-                                <Input 
-                                    placeholder="Bio" 
-                                    fullWidth 
+                                <Input
+                                    placeholder="Bio"
+                                    fullWidth
                                     value={bio}
                                     onChange={(e) => setBio(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <Input 
-                                    placeholder="Skills" 
-                                    fullWidth 
+                                <Input
+                                    placeholder="Skills"
+                                    fullWidth
                                     value={skills}
                                     onChange={(e) => setSkills(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <Input 
-                                    placeholder="CV" 
-                                    fullWidth 
+                                <Input
+                                    placeholder="CV"
+                                    fullWidth
                                     value={cv}
                                     onChange={(e) => setCv(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <Input 
-                                    placeholder="Date of Birth" 
-                                    fullWidth 
-                                    value={dateOfBirth}
-                                    onChange={(e) => setDateOfBirth(e.target.value)}
+                                <Input
+                                placeholder="Date of Birth"
+                                fullWidth
+                                value={dateOfBirth}
+                                onChange={(e) => setDateOfBirth(e.target.value)}
+                                    type="date"
+                                    slotProps={{
+                                        input: {
+                                            min: '2018-06-07',
+                                            max: '2018-06-14',
+                                        },
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12} sx={{ textAlign: 'center' }}>
