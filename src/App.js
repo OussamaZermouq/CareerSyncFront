@@ -2,6 +2,8 @@ import './App.css';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomePage from './Components/HomePage';
 import CvMaker from './Components/CvMaker';
+import Profile  from './Components/Profile';
+
 
 import Introduce from './Components/Introduce';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -26,6 +28,8 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/Introduce" element={<Introduce />} />
             <Route path="/CvMaker" element={<CvMaker />} />
+            <Route path="/Profile" element={<Profile />} />
+
 
           </Routes>
         </Router>
